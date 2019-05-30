@@ -1,12 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { AppContainer } from 'react-hot-loader'
+import { applyMiddleware, compose, createStore } from 'redux'
+import { createBrowserHistory } from 'history'
+import { routerMiddleware } from 'connected-react-router'
+import { Provider } from 'react-redux'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
+import rootReducer from './reducers'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const history = createBrowserHistory()
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+    rootReducer(history),
+    composeEnhancer(
+        applyMiddleware(
+            routerMiddleware(history),
+        ),
+    ),
+)
+
+const render = () => {
+    ReactDOM.render(
+        <AppContainer>
+            <Provider store={store}>
+                <App history={history} />
+            </Provider>
+        </AppContainer>,
+        document.getElementById('root')
+    )
+}
+
+render()
+
+// Hot reloading
+if (module.hot) {
+    // Reload components
+    module.hot.accept('./App', () => {
+        render()
+    })
+
+    // Reload reducers
+    module.hot.accept('./reducers', () => {
+        store.replaceReducer(rootReducer(history))
+    })
+}
