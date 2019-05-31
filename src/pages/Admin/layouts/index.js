@@ -1,31 +1,16 @@
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import React, {lazy} from 'react'
+import React from 'react'
 import Branch from '../Branch'
+import Goods from '../Goods'
+
+import {Route, Link} from 'react-router-dom'
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
 export default class AdminLayout extends React.Component{
 
-  constructor(props) {
-    super(props);
-    this.state = {component: lazy(() => import(`../Branch`))};
-  }
-
-  handleClick = (componentName) => {
-
-    console.log('=====================handleClick')
-    console.log(Branch)
-    console.log(lazy(() => import(`../Branch`)))
-
-    this.setState({component: lazy(() => import(`../${componentName}`))})
-
-  }
-
     render() {
-
-        //const Page = lazy(() => import(`../${this.state.component}`))
-        const Page = lazy(() => import(`../Branch`));
 
         return (
             <Layout>
@@ -49,8 +34,8 @@ export default class AdminLayout extends React.Component{
                             style={{ height: '100%', borderRight: 0 }}
                         >
                             <SubMenu key="sub1" title={<span><Icon type="user" />管理</span>}>
-                                <Menu.Item key="1" onClick={() => this.handleClick('Branch')}><div>品牌</div></Menu.Item>
-                                <Menu.Item key="2" onClick={() => this.handleClick('Goods')}>商品</Menu.Item>
+                                <Menu.Item key="branch"><Link to='/admin/branch'>品牌</Link></Menu.Item>
+                                <Menu.Item key="goods"><Link to='/admin/goods'>商品</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
@@ -58,8 +43,8 @@ export default class AdminLayout extends React.Component{
                         <Breadcrumb style={{ margin: '16px 0' }}>
                         </Breadcrumb>
                         <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-                        <Page />
-                            
+                            <Route exact key='1' path='/admin/branch' component={Branch} />
+                            <Route exact key='2' path='/admin/goods' component={Goods} />
                         </Content>
                     </Layout>
                 </Layout>

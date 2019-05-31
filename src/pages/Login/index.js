@@ -30,15 +30,9 @@ class NormalLoginForm extends React.Component {
             if(respData.status === 0) {
                 console.log("login index.js  login success!")
                 this.props.login(respData.data.loginName)
-                this.props.history.push('/admin');
+                this.props.history.push('/admin/branch');
             }
         })
-
-        // this.props.form.validateFields((err, values) => {
-        //     if (!err) {
-        //         console.log('Received values of form: ', values);
-        //     }
-        // });
     }
 
     render() {

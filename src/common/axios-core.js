@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import globalCode from '../constants/globalCode';
-// import { Toast } from 'antd-mobile';
-// import {createHashHistory} from 'history';
+//import { Toast } from 'antd-mobile';
+import {createHashHistory} from 'history';
 // import commonInfo from '../common/CommonInfo';
 
 const instance = axios.create({
@@ -26,25 +26,22 @@ instance.interceptors.request.use(function(config){
 
 //添加一个响应拦截器
 instance.interceptors.response.use(function (response) {
-    // 1.成功
-    // if (response.data.success && response.data.messageCode === globalCode.success) {
-    //     if(commonInfo.hasLoading){
-    //         Toast.hide();
-    //     }
-    //     return response.data.data;
-    // }
+    //1.成功
+    if (response.data.status === 0) {
+        return response;
+    }
     //
     // // 2.session过期
-    // if (!response.data.success && response.data.messageCode === globalCode.timeout) {
-    //     Toast.hide();
-    //     Toast.info("会话过期，请重新登录", 1);
-    //     createHashHistory().push('/login');
-    //
-    //     // 定义一个messagecode在后面会用到
-    //     return  Promise.reject({
-    //         messageCode: 'timeout'
-    //     })
-    // }
+    if (response.data.status === 2) {
+        //Toast.hide();
+        //Toast.info("会话过期，请重新登录", 1);
+        createHashHistory().push('/');
+    
+        // 定义一个messagecode在后面会用到
+        return Promise.reject({
+            messageCode: 'timeout'
+        })
+    }
     //
     // // 3.11111111 系统异常、网络异常
     // if (response.data.success && response.data.messageCode === globalCode.busyCode) {
