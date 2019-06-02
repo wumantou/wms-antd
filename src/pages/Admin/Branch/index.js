@@ -1,68 +1,74 @@
-import React from "react"
-import { Table, Divider } from "antd"
-import axios from '../../../common/axios-core'
+import React from 'react';
+import { Table } from 'antd';
+import axios from '../../../common/axios-core';
+import './index.css';
+import UpdateBranch from './update';
+import CreateBranch from './create'
+import {withRouter} from 'react-router-dom';
+import { connect } from 'react-redux'
 
 class Branch extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
-
-
-    async componentWillMount() {
-        //axios.post('http://127.0.0.1:8081/user/login', {loginName:'admin', password:'123456'}).then((data) => {
-        axios.get('http://127.0.0.1:8081/branch/list').then((data) => {
-
-            const respData = data.data;
-
-            console.log(respData)
-            if(respData.status === 0) {
-                console.log("================success" + respData.data)
-                this.setState({data: respData.data})
-            }
-        })
-    }
-
-    render() {
-
-        const columns = [
-            {
-                title: "id",
-                dataIndex: "id",
-                key: "id",
-            },
-            {
-                title: "品牌",
-                dataIndex: "branchName",
-                key: "branchName",
-            },
-            {
-                title: "备注",
-                dataIndex: "remark",
-                key: "remark",
-            },
-            {
-                title: "Action",
-                key: "action",
-                render: (text, record) => (
-                    <span>
-                        <a href="branch/update">修改</a>
-                        <Divider type="vertical" />
-                        <a href="branch/delete">删除</a>
-                    </span>
-                ),
-            },
-        ]
-        
-
-        const {data} = this.state;
+  constructor(props) {
+    super(props);
     
+    this.state = {};
+  }
 
-        return (
-            <Table columns={columns} dataSource={data} rowKey={record => record.id}/>
-        )
-    }
+  getList = () => {
+    axios.get('http://127.0.0.1:8081/branch/list').then((data) => {
+        const respData = data.data;
+        if(respData.status === 0) {
+          this.setState({data: respData.data});
+        }
+    });
+ }
+  componentDidMount() {
+    this.getList();
+  }
+
+  render() {
+
+    const columns = [
+      {
+        title: 'id',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      {
+        title: '品牌',
+        dataIndex: 'branchName',
+        key: 'branchName',
+      },
+      {
+        title: '备注',
+        dataIndex: 'remark',
+        key: 'remark',
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        render: (text, record) => (
+          //render: (text, record) => (
+          <span>
+            <UpdateBranch record={record} getList={this.getList}/>
+             {/* <Divider type="vertical" />
+            <DeleteBranch record={{id:record.id}} getList={this.getList}/> */}
+          </span>
+        ),
+      },
+    ];    
+
+    return (
+        <div>
+            <CreateBranch getList={this.getList}/>
+            <Table columns={columns} dataSource={this.state.data} rowKey={record => record.id}/>
+        </div>
+      
+    );
+  }
 }
 
-export default Branch
+const Temp = connect()(withRouter(Branch));
+
+export default () => (<Temp />);

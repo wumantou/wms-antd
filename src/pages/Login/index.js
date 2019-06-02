@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import { connect } from 'react-redux'
 import { login } from '../../actions/login'
 import axios from '../../common/axios-core';
@@ -9,7 +9,6 @@ import {withRouter} from 'react-router-dom';
 const FormItem = Form.Item;
 
 class NormalLoginForm extends React.Component {
-
 
     handleSubmit = async (e) => {
         e.preventDefault();
@@ -54,17 +53,17 @@ class NormalLoginForm extends React.Component {
                     )}
                 </FormItem>
                 <FormItem>
-                    {getFieldDecorator('remember', {
+                    {/* {getFieldDecorator('remember', {
                         valuePropName: 'checked',
                         initialValue: true,
                     })(
                         <Checkbox>Remember me</Checkbox>
                     )}
-                    <a className="login-form-forgot" href="/">Forgot password</a>
+                    <a className="login-form-forgot" href="/">Forgot password</a> */}
                     <Button type="primary" htmlType="submit" className="login-form-button">
                         Log in
                     </Button>
-                    Or <a href="/">register now!</a>
+                    
                 </FormItem>
             </Form>
         );
