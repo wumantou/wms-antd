@@ -1,6 +1,6 @@
 import { Modal, Button, Form, Input } from 'antd';
 import React from 'react';
-import './update.css';
+import './index.css';
 import axios from '../../../common/axios-core'
 
 const FormItem = Form.Item;
@@ -22,7 +22,7 @@ class CreateForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return(
-      <Form className="login-form" >
+      <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} className="form-item" >
         <FormItem label="品牌名">
           {getFieldDecorator('branchName', {
             rules: [{ required: true, message: 'Please input branchName!' }],
