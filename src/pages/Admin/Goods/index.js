@@ -25,7 +25,6 @@ class Goods extends React.Component {
     this.getList();
   }
 
-
   render() {
 
     const columns = [
