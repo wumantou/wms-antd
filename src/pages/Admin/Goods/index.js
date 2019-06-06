@@ -1,7 +1,8 @@
-import { Table } from 'antd';
+import { Table, Row, Col } from 'antd';
 import React from 'react'
 import axios from '../../../common/axios-core';
 import CreateGoods from './create'
+import UpdateGoods from './update'
 
 
 class Goods extends React.Component {
@@ -73,7 +74,18 @@ class Goods extends React.Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            123
+            <Row>
+              <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                <UpdateGoods record={record} getList={this.getList}/>
+              </Col>
+              <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                <UpdateGoods record={record} getList={this.getList}/>
+              </Col>
+              <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+                Col
+              </Col>
+            </Row>
+            
           </span>
         ),
       },
