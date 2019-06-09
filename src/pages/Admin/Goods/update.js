@@ -9,46 +9,46 @@ const { Option } = Select;
 class UpdateForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {branchData:[]};
+    this.state = { branchData: [] };
   }
 
   componentDidMount() {
-    axios.get('http://127.0.0.1:8081/branch/list').then((data) => {
-        const respData = data.data;
-        if(respData.status === 0) {
-          this.setState({branchData: respData.data});
-        }
+    axios.get('/branch/list').then((data) => {
+      const respData = data.data;
+      if (respData.status === 0) {
+        this.setState({ branchData: respData.data });
+      }
     });
-    this.props.form.setFieldsValue({...this.props.record});
+    this.props.form.setFieldsValue({ ...this.props.record });
     this.props.onRef(this)
   }
 
   handleUpdate = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-      this.props.changeRecore(values);
+        this.props.changeRecore(values);
       }
-  });
+    });
   }
-    
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    return(
+    return (
       <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} className="form-item">
-        <FormItem label="品牌"> 
+        <FormItem label="品牌">
           {getFieldDecorator('branchId', {
             rules: [{ required: true, message: 'Please choose branch!' }],
           })(
             <Select
-            placeholder="Select a branch"
-            defaultValue={this.props.record.branchId}
-          >
-            {
-              this.state.branchData.map((record) => {
+              placeholder="Select a branch"
+              defaultValue={this.props.record.branchId}
+            >
+              {
+                this.state.branchData.map((record) => {
                   return <Option value={record.id}>{record.branchName}</Option>
-              })
-            }
-          </Select>
+                })
+              }
+            </Select>
           )}
         </FormItem>
         <FormItem label="商品名">
@@ -96,13 +96,13 @@ class UpdateBranch extends React.Component {
   }
 
   changeRecore = (record) => {
-    const postData = {id:this.props.record.id, ...record}
-    axios.post('http://127.0.0.1:8081/product/update', postData).then((data) => {
-            const respData = data.data;
-            if(respData.status === 0) {
-                this.props.getList();
-            }
-        })
+    const postData = { id: this.props.record.id, ...record }
+    axios.post('/product/update', postData).then((data) => {
+      const respData = data.data;
+      if (respData.status === 0) {
+        this.props.getList();
+      }
+    })
   }
 
   showModal = () => {
@@ -121,11 +121,11 @@ class UpdateBranch extends React.Component {
       confirmLoading: true,
     });
     this.child.handleUpdate();
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    
+    this.setState({
+      visible: false,
+      confirmLoading: false,
+    });
+
   };
 
   handleCancel = () => {
@@ -137,7 +137,7 @@ class UpdateBranch extends React.Component {
   render() {
     const { visible, confirmLoading } = this.state;
     const ModalComponent = Form.create()(UpdateForm);
-    const ModalText = <ModalComponent record={this.props.record} changeRecore={this.changeRecore} onRef={this.onRef}/>;
+    const ModalText = <ModalComponent record={this.props.record} changeRecore={this.changeRecore} onRef={this.onRef} />;
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>

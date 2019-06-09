@@ -56,7 +56,7 @@ class UpdateBranch extends React.Component {
 
   changeRecore = (record) => {
     const postData = {id:this.props.record.id, ...record}
-    axios.post('http://127.0.0.1:8081/branch/update', postData).then((data) => {
+    axios.post('/branch/update', postData).then((data) => {
             const respData = data.data;
             if(respData.status === 0) {
                 this.props.getList();

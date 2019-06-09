@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { message } from 'antd';
 // import globalCode from '../constants/globalCode';
 //import { Toast } from 'antd-mobile';
-import {createHashHistory} from 'history';
+//import {createHashHistory} from 'history';
 // import commonInfo from '../common/CommonInfo';
 
 const instance = axios.create({
@@ -26,6 +27,7 @@ instance.interceptors.request.use(function(config){
 
 //添加一个响应拦截器
 instance.interceptors.response.use(function (response) {
+
     //1.成功
     if (response.data.status === 0) {
         return response;
@@ -35,13 +37,16 @@ instance.interceptors.response.use(function (response) {
     if (response.data.status === 2) {
         //Toast.hide();
         //Toast.info("会话过期，请重新登录", 1);
-        createHashHistory().push('/');
+        //createHashHistory().push('/');
+        window.location.href = '/';
+        message.info("未登录")
     
         // 定义一个messagecode在后面会用到
         return Promise.reject({
             messageCode: 'timeout'
         })
     }
+    
     //
     // // 3.11111111 系统异常、网络异常
     // if (response.data.success && response.data.messageCode === globalCode.busyCode) {
@@ -62,6 +67,8 @@ instance.interceptors.response.use(function (response) {
     // return Promise.reject({
     //     messageCode: 'sysError'
     // });
+    message.info("服务异常，请联系管理员")
+    //window.location.href = '/';
 });
 
 export default instance;

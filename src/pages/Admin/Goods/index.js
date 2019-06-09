@@ -1,27 +1,30 @@
-import { Table, Row, Col } from 'antd';
+import { Table, Row, Col } from 'antd'
 import React from 'react'
-import axios from '../../../common/axios-core';
+import axios from '../../../common/axios-core'
 import CreateGoods from './create'
 import UpdateGoods from './update'
-
+import DeleteGoods from './delete'
+import Count from "./Count"
+import Stock from "./Stock"
+import Operate from './Operate'
 
 class Goods extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {};
   }
 
   getList = () => {
-    axios.post('http://127.0.0.1:8081/product/page', {}).then((data) => {
-        const respData = data.data;
-        console.log(respData)
-        if(respData.status === 0) {
-          this.setState({data: respData.data.content});
-        }
+    axios.post('/product/page', {}).then((data) => {
+      const respData = data.data;
+      console.log(respData)
+      if (respData.status === 0) {
+        this.setState({ data: respData.data.content });
+      }
     });
- }
+  }
   componentDidMount() {
     this.getList();
   }
@@ -40,7 +43,7 @@ class Goods extends React.Component {
         key: 'productName',
       },
       {
-        title: '数量',
+        title: '总数量',
         dataIndex: 'productCount',
         key: 'productCount',
       },
@@ -60,7 +63,7 @@ class Goods extends React.Component {
         key: 'price',
       },
       {
-        title: '库存',
+        title: '当前库存',
         dataIndex: 'stock',
         key: 'stock',
       },
@@ -74,26 +77,33 @@ class Goods extends React.Component {
         key: 'action',
         render: (text, record) => (
           <span>
-            <Row>
-              <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                <UpdateGoods record={record} getList={this.getList}/>
+
+            <Row gutter={16}>
+              <Col span={3}>
+                <UpdateGoods record={record} getList={this.getList} />
               </Col>
-              <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                <UpdateGoods record={record} getList={this.getList}/>
+              <Col span={3}>
+                <DeleteGoods recordId={record.id} getList={this.getList} />
               </Col>
-              <Col xs={{ span: 5, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-                Col
+              <Col span={3}>
+                <Count record={record} getList={this.getList} />
+              </Col>
+              <Col span={3}>
+                <Stock record={record} getList={this.getList} />
+              </Col>
+              <Col span={3}>
+                <Operate record={record} />
               </Col>
             </Row>
-            
+
           </span>
         ),
       },
     ];
     return (
       <div>
-        <CreateGoods getList={this.getList}/>
-        <Table columns={columns} dataSource={this.state.data} rowKey={record => record.id}/>
+        <CreateGoods getList={this.getList} />
+        <Table columns={columns} dataSource={this.state.data} rowKey={record => record.id} />
       </div>
     )
   }

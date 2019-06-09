@@ -16,7 +16,7 @@ class Branch extends React.Component {
   }
 
   getList = () => {
-    axios.get('http://127.0.0.1:8081/branch/list').then((data) => {
+    axios.get('/branch/list').then((data) => {
         const respData = data.data;
         if(respData.status === 0) {
           this.setState({data: respData.data});
@@ -62,7 +62,7 @@ class Branch extends React.Component {
     return (
         <div>
             <CreateBranch getList={this.getList}/>
-            <Table columns={columns} dataSource={this.state.data} rowKey={record => record.id}/>
+            <Table columns={columns} dataSource={this.state.data} rowKey={record => record.id} pagination={false}/>
         </div>
       
     );

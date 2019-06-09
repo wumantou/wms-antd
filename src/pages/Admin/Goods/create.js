@@ -10,25 +10,26 @@ class CreateForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {branchData:[]};
+    this.state = { branchData: [] };
   }
 
   componentDidMount() {
     this.props.onRef(this)
-    axios.get('http://127.0.0.1:8081/branch/list').then((data) => {
-        const respData = data.data;
-        if(respData.status === 0) {
-          this.setState({branchData: respData.data});
-        }
+    axios.get('/branch/list').then((data) => {
+      const respData = data.data;
+      if (respData.status === 0) {
+        this.setState({ branchData: respData.data });
+      }
     });
   }
 
   handleUpdate = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-      this.props.changeRecore(values);
+        console.log("no error")
+        this.props.changeRecore(values);
       }
-  });
+    });
   }
 
   // handleSelectChange = value => {
@@ -37,7 +38,7 @@ class CreateForm extends React.Component {
   //     note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
   //   });
   // };
-    
+
   render() {
     const { getFieldDecorator } = this.props.form;
     // const formItemLayout = {
@@ -50,21 +51,22 @@ class CreateForm extends React.Component {
     //     sm: { span: 16 },
     //   },
     // };
-    return(
+    return (
       <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} className="form-item">
-        <FormItem label="品牌"> 
+        <FormItem label="品牌">
           {getFieldDecorator('branchId', {
             rules: [{ required: true, message: 'Please choose branch!' }],
           })(
             <Select
-            placeholder="Select a branch"
-          >
-            {
-              this.state.branchData.map((record) => {
+              placeholder="Select a branch"
+              defaultValue={this.state.branchData[0] ? this.state.branchData[0].id : ''}
+            >
+              {
+                this.state.branchData.map((record) => {
                   return <Option value={record.id}>{record.branchName}</Option>
-              })
-            }
-          </Select>
+                })
+              }
+            </Select>
           )}
         </FormItem>
         <FormItem label="商品名">
@@ -126,13 +128,13 @@ export default class CreateGoods extends React.Component {
   }
 
   changeRecore = (record) => {
-    const postData = {...record}
-    axios.post('http://127.0.0.1:8081/product/insert', postData).then((data) => {
-            const respData = data.data;
-            if(respData.status === 0) {
-                this.props.getList();
-            }
-        })
+    const postData = { ...record }
+    axios.post('/product/insert', postData).then((data) => {
+      const respData = data.data;
+      if (respData.status === 0) {
+        this.props.getList();
+      }
+    })
   }
 
   showModal = () => {
@@ -151,11 +153,11 @@ export default class CreateGoods extends React.Component {
       confirmLoading: true,
     });
     this.child.handleUpdate();
-      this.setState({
-        visible: false,
-        confirmLoading: false,
-      });
-    
+    this.setState({
+      visible: false,
+      confirmLoading: false,
+    });
+
   };
 
   handleCancel = () => {
@@ -167,7 +169,7 @@ export default class CreateGoods extends React.Component {
   render() {
     const { visible, confirmLoading } = this.state;
     const ModalComponent = Form.create()(CreateForm);
-    const ModalText = <ModalComponent record={this.props.record} changeRecore={this.changeRecore} onRef={this.onRef}/>;
+    const ModalText = <ModalComponent record={this.props.record} changeRecore={this.changeRecore} onRef={this.onRef} />;
     return (
       <div>
         <Button type="primary" onClick={this.showModal}>

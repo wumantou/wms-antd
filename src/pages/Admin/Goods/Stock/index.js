@@ -1,13 +1,13 @@
 import { Modal, Button, Form, Input } from 'antd';
 import React from 'react';
-import './index.css';
-import axios from '../../../common/axios-core'
+import axios from '../../../../common/axios-core'
 
 const FormItem = Form.Item;
 
 class CreateForm extends React.Component {
 
   componentDidMount() {
+    this.props.form.setFieldsValue({ productName: this.props.record.productName });
     this.props.onRef(this)
   }
 
@@ -18,14 +18,22 @@ class CreateForm extends React.Component {
       }
   });
   }
+
     
   render() {
     const { getFieldDecorator } = this.props.form;
     return(
-      <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} className="form-item" >
-        <FormItem label="品牌名">
-          {getFieldDecorator('branchName', {
-            rules: [{ required: true, message: 'Please input branchName!' }],
+      <Form labelCol={{ span: 5 }} wrapperCol={{ span: 16 }} className="form-item">
+        <FormItem label="商品名">
+          {getFieldDecorator('productName', {
+            rules: [{ required: true, message: 'Please input productName!' }],
+          })(
+            <Input disabled="true"/>
+          )}
+        </FormItem>
+        <FormItem label="出库数量">
+          {getFieldDecorator('reduceStock', {
+            rules: [{ required: true, message: 'Please input count!' }],
           })(
             <Input />
           )}
@@ -42,7 +50,7 @@ class CreateForm extends React.Component {
   }
 }
 
-class CreateBranch extends React.Component {
+export default class ReducrStock extends React.Component {
 
   constructor(props) {
     super(props);
@@ -54,8 +62,8 @@ class CreateBranch extends React.Component {
   }
 
   changeRecore = (record) => {
-    const postData = {...record}
-    axios.post('/branch/insert', postData).then((data) => {
+    const postData = {id: this.props.record.id ,...record}
+    axios.post('/product/stock/reduce', postData).then((data) => {
             const respData = data.data;
             if(respData.status === 0) {
                 this.props.getList();
@@ -98,11 +106,11 @@ class CreateBranch extends React.Component {
     const ModalText = <ModalComponent record={this.props.record} changeRecore={this.changeRecore} onRef={this.onRef}/>;
     return (
       <div>
-        <Button type="primary" onClick={this.showModal} className="update-button">
-          添加
+        <Button type="primary" onClick={this.showModal}>
+          出库
         </Button>
         <Modal
-          title='添加'
+          title='出库'
           visible={visible}
           onOk={this.handleOk}
           confirmLoading={confirmLoading}
@@ -114,5 +122,3 @@ class CreateBranch extends React.Component {
     );
   }
 }
-
-export default CreateBranch;

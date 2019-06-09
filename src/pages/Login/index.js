@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 import { connect } from 'react-redux'
 import { login } from '../../actions/login'
 import axios from '../../common/axios-core';
@@ -22,7 +22,7 @@ class NormalLoginForm extends React.Component {
             }
         });
 
-        await axios.post('http://127.0.0.1:8081/user/login', postData).then((data) => {
+        await axios.post('/user/login', postData).then((data) => {
             const respData = data.data;
 
             console.log(respData)
@@ -30,6 +30,8 @@ class NormalLoginForm extends React.Component {
                 console.log("login index.js  login success!")
                 this.props.login(respData.data.loginName)
                 this.props.history.push('/admin/branch');
+            } else {
+                message.info("账号或密码错误")
             }
         })
     }
